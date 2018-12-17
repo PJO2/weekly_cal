@@ -1,0 +1,46 @@
+
+.schedule-rows td {
+  width: 80px;
+  height: 8px;
+  margin: 1px;
+  padding: 1px;
+  background-color: #4060A0;
+  cursor: pointer;
+}
+
+.schedule-rows td:first-child {
+  background-color: transparent;
+  text-align: right;
+  position: relative;
+  top: -12px;
+}
+
+.schedule-rows td[data-selected],
+.schedule-rows td[data-selecting] { background-color: #E74C3C; }
+.schedule-rows td[data-disabled] { opacity: 0.55; }
+
+.schedule-rows td {
+  width: 60px;
+  height: 6px;
+  margin: 1px;
+  padding: 0px;
+  background-color: #4060B0;
+  cursor: pointer;
+}
+
+ body { font-family:'roboto'; font-size: 9pt; background-color:#ECF0F1; }
+
+.button:active { background-color: #765432; }
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    white-space: normal;
+    padding: 150px 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    width: 100px;
+}
+

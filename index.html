@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Configuration chauffage</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+  <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+</head>
+
+
+<body>
+
+<h1 style="margin:15px auto 30px auto; text-align:left; padding-left: 50px;">S&eacute;lection des plages &eacute;co et  confort</h1>
+
+<form method='POST' action="/cgi-bin/save_temp.pl">
+<fieldset>
+ Temp&eacute;rature confort 
+  <input type="text" id="confort" name="TempConfort" value="Mickey" style="max-width:60px;">
+  &nbsp; &nbsp; Temp&eacute;rature &eacute;co:
+  <input type="text" id="eco"     name="TempEco" value="Mouse" style="max-width:60px;">
+   &nbsp; &nbsp; <input type="submit" value="Update">
+</fieldset>
+</form>
+<br>
+<br>
+
+<table>
+<tr>
+<td>
+<div id="day-schedule"></div>
+</td><td style="padding: 20px 100px 0 100px; vertical-align:top; max-width: 150px">
+<input type="button" class="button" onclick="senddata()" value="Save Schedule"/>
+<div id="retour"></div>
+</td></tr></table>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="index.js"></script>
+  <script src="adapt2plugin.js"></script>
+  <script>
+    (function ($) {
+      $("#day-schedule").dayScheduleSelector({
+        days: [0, 1, 2, 3, 4, 5, 6],
+        interval: 30,
+        startTime: '00:00',
+        endTime: '24:00'
+      });
+      $("#day-schedule").on('selected.artsy.dayScheduleSelector', function (e, selected) {
+        console.log(selected);
+      })
+      $("#day-schedule").data('artsy.dayScheduleSelector').deserialize(        
+                JSON.parse( calendar_get('calendar.txt') )
+       );
+    })($);
+function ajax_info_result(result) 
+{
+  $("#retour").html(result);
+}
+function senddata() {
+$.ajax ( { type:"POST", url:"cgi-bin/save_cal.pl", 
+           data: $("#day-schedule").data('artsy.dayScheduleSelector').serialize() ,
+           cache: false,
+           success: function(result) { ajax_info_result(result); },
+           async: false } );
+}
+
+    $(document).ready(function() {
+        // after the page elements are all loaded, then run the script
+        // Set the input field with unique ID #name
+        // do not forget to change the URL
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open ("GET",
+                      "http://domoticz.jounin.space:8080/json.htm?type=command&param=getuservariables",
+                      false);
+         xmlHttp.send (null);
+         console.log (xmlHttp.responseText);
+         var data = JSON.parse(xmlHttp.responseText);
+
+        $("#confort").val(data.result[0].Value);
+        $("#eco").val(data.result[1].Value);
+        });
+</script>
+
+
+</script>
+</body>
+</html>
+
